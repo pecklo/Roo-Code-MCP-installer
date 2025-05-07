@@ -13,7 +13,7 @@ A command-line utility designed to streamline the installation and management of
     *   Node.js (`package.json`)
     *   Python (`requirements.txt`, `pyproject.toml`)
     *   Go (`go.mod`, `main.go`)
-    *   Rust (`Cargo.toml`)
+    *   Rust (`Cargo.toml`) (Still in progress) (may not work)
 *   **Dependency Management:** Automatically installs project dependencies using the detected package manager:
     *   `npm install` (with fallback checks for `yarn install` or `pnpm install`)
     *   `pip install -r requirements.txt` (with fallback check for `pip3`)
